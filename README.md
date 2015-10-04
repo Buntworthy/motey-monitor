@@ -9,6 +9,8 @@
     - [List of sensors:](#list-of-sensors)
 - [Temperature sensors](#temperature-sensors)
 - [Hub](#hub)
+- [Database](#database)
+    - [Structure](#structure)
 
 <!-- /MarkdownTOC -->
 
@@ -38,3 +40,14 @@ Moteino using RF for communication to the hub, DHT-22 for temperature and humidi
 ## Hub
 
 Raspberry Pi connected to Moteino. Moteino receives RF temperature readings, communicates to Pi over serial port. Pi updates MySQL database via calls to a PHP script. Pi code written in Python to monitor serial port and report to database. Plugged into power supply.
+
+## Database
+
+### Structure
+
+Temperature database fields:
+
+- Datetime
+- ID (-> relate to friendly name in a config file etc)
+- Temperature
+- Humidity
