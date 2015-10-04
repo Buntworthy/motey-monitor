@@ -33,6 +33,8 @@ Logging data in a house, storing in server database, visualisation on the web.
 - Electricity sensor
 - Hot water sensor
 
+![Overview plan](/Images/monitor_plan.png)
+
 ## Temperature sensors
 
 Moteino using RF for communication to the hub, DHT-22 for temperature and humidity measurments, AAA(?) batteries for power, 3D printed case.
