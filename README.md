@@ -11,6 +11,7 @@
 - [Hub](#hub)
 - [Database](#database)
     - [Structure](#structure)
+- [PHP updates](#php-updates)
 
 <!-- /MarkdownTOC -->
 
@@ -53,3 +54,11 @@ Temperature database fields:
 - ID (-> relate to friendly name in a config file etc)
 - Temperature
 - Humidity
+
+## PHP updates
+
+http://cutsquash.com/get_week.php?key=KEY_GOES_HERE
+*Returns past week of readings in json format*
+
+http://cutsquash.com/add-reading.php?key=KEY_GOES_HERE&date=2015-10-2+15%3A35%3A15&ID=hall&temp=23.57&rh=65.87
+*Adds a single reading to the temperature database. (Date needs to be formatted correctly)*
