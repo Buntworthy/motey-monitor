@@ -21,8 +21,8 @@ class Worker(threading.Thread):
     def run(self):
         while True:
             time.sleep(self.interval)
-            reading = self.reader.get_temp()
-            self.queue.put(reading)
+            reading, id = self.reader.get_temp()
+            self.queue.put((reading,id))
 
 
 def printr(writing_queue):
@@ -35,12 +35,15 @@ if __name__ == "__main__":
 
     # Set up queue and workers
     q = Queue()
-    t = Worker(2, WebReader(), q)
+    workers = list()
+    workers.append(Worker(2, WebReader("Web reading"), q))
+    workers.append(Worker(0.1, DummySerialReader(), q))
 
     # Set up thread for output
     p = threading.Thread(target=printr, args=(q,))
     p.setDaemon(False)
 
     # Start threads
-    t.start()
+    for worker in workers:
+        worker.start()
     p.start()
