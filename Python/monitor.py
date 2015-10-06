@@ -24,11 +24,22 @@ class WebReader(object):
             raise ConnectionError("Couldn't get the temperature")
 
 
-def worker(interval, reader, reading_queue):
-    while True:
-        time.sleep(interval)
-        reading = reader.get_temp()
-        reading_queue.put(reading)
+class Worker(threading.Thread):
+    """ A worker thread which sleeps for a set interval then reads a current
+    temperature using the get_temp method of the passed reader object
+    """
+    def __init__(self, interval, reader, queue):
+        super().__init__()
+        self.daemon = True
+        self.interval = interval
+        self.reader = reader
+        self.queue = queue
+
+    def run(self):
+        while True:
+            time.sleep(self.interval)
+            reading = self.reader.get_temp()
+            self.queue.put(reading)
 
 
 def printr(writing_queue):
@@ -38,13 +49,15 @@ def printr(writing_queue):
 
 
 if __name__ == "__main__":
-    # Set up queue and threads
-    web_temperature = WebReader()
+
+    # Set up queue and workers
     q = Queue()
-    t = threading.Thread(target=worker, args=(10, web_temperature, q))
-    t.setDaemon(True)
+    t = Worker(2, WebReader(), q)
+
+    # Set up thread for output
     p = threading.Thread(target=printr, args=(q,))
     p.setDaemon(False)
 
+    # Start threads
     t.start()
     p.start()
