@@ -16,7 +16,8 @@ class TestReaders(unittest.TestCase):
 
     def test_WebReaderError(self):
         self.w.root = "http://nothinghereatall.imsure"
-        self.failUnlessRaises(ConnectionError, self.w.get_temp())
+        # How do I know all the exceptions that could be raised?
+        self.assertRaises(Exception, self.w.get_temp)
 
 
 if __name__ == '__main__':
