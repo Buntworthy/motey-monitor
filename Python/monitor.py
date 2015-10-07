@@ -2,7 +2,6 @@
 import threading
 import time
 from queue import Queue
-import datetime
 
 # Internal
 from readers import *
@@ -22,8 +21,8 @@ class Worker(threading.Thread):
     def run(self):
         while True:
             time.sleep(self.interval)
-            reading, reading_id = self.reader.get_temp()
-            self.queue.put((reading,reading_id))
+            reading = self.reader.get_temp()
+            self.queue.put(reading)
 
 
 def printr(writing_queue):
@@ -44,17 +43,15 @@ class PhpWriter(threading.Thread):
     def run(self):
         while True:
             # Get the reading from the queue
-            (reading, reading_id) = self.queue.get()
+            reading = self.queue.get()
 
-            # Record the current time
-            now = datetime.datetime.now()
+            # Add the secret key
+            reading['key'] = self.key
 
-            reading_entry = {"key": self.key,
-                             "datetime": str(now),
-                             "temp": str(reading),
-                             "id": reading_id}
-            response = requests.get(self.url, params=reading_entry)
-            print(reading_entry)
+            # Add to the db
+            # TODO handle connection errors
+            response = requests.get(self.url, params=reading)
+            print(reading)
 
 
 

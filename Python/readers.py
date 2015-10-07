@@ -1,6 +1,7 @@
 import requests
 import random
 import time
+import datetime
 
 
 class WebReader(object):
@@ -21,10 +22,19 @@ class WebReader(object):
             # Interpret the response
             result = r.json()
             temp = result['main']['temp'] - 273.15
-            return temp, self.reading_id
+
+            # Assemble the result
+            reading = {'temp': temp, 'id': self.reading_id}
+            reading = self.add_reading_time(reading)
+            return reading
         else:
             raise ConnectionError("Couldn't get the temperature")
 
+    def add_reading_time(self, reading):
+        # TODO make this a method of an abc
+        now = datetime.datetime.now()
+        reading['datetime']  = str(now)
+        return reading
 
 class DHTReader(object):
     def __init__(self):
@@ -52,4 +62,13 @@ class DummySerialReader(object):
         dummy_temp = self.max_dummy_temp*random.random()
         # Make up an reading_id
         reading_id = "Serial reading: " + str(random.randint(0, 100))
-        return dummy_temp, reading_id
+
+        # Assemble the result
+        reading = {'temp': dummy_temp, 'id': reading_id}
+        reading = self.add_reading_time(reading)
+        return reading
+
+    def add_reading_time(self, reading):
+        now = datetime.datetime.now()
+        reading['datetime']  = str(now)
+        return reading

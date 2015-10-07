@@ -19,6 +19,18 @@ class TestReaders(unittest.TestCase):
         # How do I know all the exceptions that could be raised?
         self.assertRaises(Exception, self.w.get_temp)
 
+    def test_WebReaderDict(self):
+        """
+        A Reading from get_temp should return a dict containing:
+            'temp'      - a number
+            'id'        - a string
+            'datetime'  - a string
+        """
+        reading = self.w.get_temp()
+        self.assertTrue(isinstance(reading['temp'], float))
+        self.assertTrue(isinstance(reading['id'], str))
+        self.assertTrue(isinstance(reading['datetime'], str))
+
 
 if __name__ == '__main__':
     unittest.main()
