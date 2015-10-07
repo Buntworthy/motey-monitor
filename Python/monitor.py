@@ -35,19 +35,26 @@ def printr(writing_queue):
 class PhpWriter(threading.Thread):
 
     def __init__(self, queue):
+        super().__init__()
         self.queue = queue
+        self.url = "http://www.cutsquash.com/add-reading.php"
+        self.key = "KEY_HERE"
+        self.daemon = False
 
     def run(self):
-        # Get the reading from the queue
-        (reading, reading_id) = self.queue.get()
+        while True:
+            # Get the reading from the queue
+            (reading, reading_id) = self.queue.get()
 
-        # Record the current time
-        now = datetime.datetime.now()
+            # Record the current time
+            now = datetime.datetime.now()
 
-        reading_entry = {"datetime" : str(now),
-                               "temp" : str(reading),
-                               "id": reading_id}
-        response = requests.get(self.url, params=reading_entry)
+            reading_entry = {"key": self.key,
+                             "datetime": str(now),
+                             "temp": str(reading),
+                             "id": reading_id}
+            response = requests.get(self.url, params=reading_entry)
+            print(reading_entry)
 
 
 
@@ -60,8 +67,7 @@ if __name__ == "__main__":
     workers.append(Worker(0.1, DummySerialReader(), q))
 
     # Set up thread for output
-    p = threading.Thread(target=printr, args=(q,))
-    p.setDaemon(False)
+    p = PhpWriter(q)
 
     # Start threads
     for worker in workers:
