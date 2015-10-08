@@ -18,12 +18,11 @@ if ($conn->connect_error) {
 }
 
 // add the current reading to the database
-$sql = "INSERT INTO temperature (date, ID, temp, rh)
+$sql = "INSERT INTO temperature (date, ID, temp)
 			VALUES ('" .
-				$_GET["date"] . "','" .
-				$_GET["ID"] . "', '" . 
-				$_GET["temp"] . "', '" .
-				$_GET["rh"] .
+				$_GET["datetime"] . "','" .
+				$_GET["id"] . "', '" .
+				$_GET["temp"] .
 				"')";
 
 if ($conn->query($sql) === TRUE) {
