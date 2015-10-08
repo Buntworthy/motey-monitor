@@ -3,15 +3,16 @@
 
 <!-- MarkdownTOC depth=3 -->
 
-- [Overview](#overview)
-    - [Aim](#aim)
-    - [Things to use:](#things-to-use)
-    - [List of sensors:](#list-of-sensors)
-- [Temperature sensors](#temperature-sensors)
-- [Hub](#hub)
-- [Database](#database)
-    - [Structure](#structure)
-- [PHP updates](#php-updates)
+- Overview
+    - Aim
+    - Things to use:
+    - List of sensors:
+- Temperature sensors
+    - Web temperature
+- Hub
+- Database
+    - Structure
+    - PHP updates
 
 <!-- /MarkdownTOC -->
 
@@ -40,6 +41,10 @@ Logging data in a house, storing in server database, visualisation on the web.
 
 Moteino using RF for communication to the hub, DHT-22 for temperature and humidity measurments, AAA(?) batteries for power, 3D printed case.
 
+### Web temperature
+
+Using openweathermap.org API for grabbing current conditions in Cambridge.
+
 ## Hub
 
 Raspberry Pi connected to Moteino. Moteino receives RF temperature readings, communicates to Pi over serial port. Pi updates MySQL database via calls to a PHP script. Pi code written in Python to monitor serial port and report to database. Plugged into power supply.
@@ -50,12 +55,12 @@ Raspberry Pi connected to Moteino. Moteino receives RF temperature readings, com
 
 Temperature database fields:
 
-- Datetime
-- ID (-> relate to friendly name in a config file etc)
-- Temperature
-- Humidity
+- datetime
+- id (-> relate to friendly name in a config file etc)
+- temp
+- rh *Currently not implemented*
 
-## PHP updates
+### PHP updates
 
 http://cutsquash.com/get_week.php?key=KEY_GOES_HERE
 
