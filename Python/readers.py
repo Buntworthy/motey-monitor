@@ -6,6 +6,8 @@ import datetime
 # External
 import Libraries.Adafruit_DHT as DHT
 
+# Internal
+from constants import *
 
 class WebReader(object):
     """
@@ -15,7 +17,8 @@ class WebReader(object):
     def __init__(self, reading_id):
         # This will always be for Cambridge:
         self.root = 'http://api.openweathermap.org/data/2.5/weather'
-        self.query = {'q': 'Cambridge,uk'}
+        self.query = {'q': 'Cambridge,uk',
+                      'APPID': OPENWEATHER_KEY}
         self.reading_id = reading_id
 
     def get_temp(self):

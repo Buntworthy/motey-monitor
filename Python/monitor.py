@@ -37,7 +37,7 @@ class PhpWriter(threading.Thread):
         super().__init__()
         self.queue = queue
         self.url = "http://www.cutsquash.com/add-reading.php"
-        self.key = "KEY_HERE"
+        self.key = PHP_KEY
         self.daemon = False
 
     def run(self):
@@ -60,8 +60,8 @@ if __name__ == "__main__":
     # Set up queue and workers
     q = Queue()
     workers = list()
-    workers.append(Worker(2, WebReader("web"), q))
-    workers.append(Worker(2, DHTReader("dht"), q))
+    workers.append(Worker(60, WebReader("web"), q))
+    workers.append(Worker(60, DHTReader("dht"), q))
     #workers.append(Worker(0.1, DummySerialReader(), q))
 
     # Set up thread for output

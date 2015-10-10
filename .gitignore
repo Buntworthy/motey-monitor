@@ -1,0 +1,5 @@
+Python/constants.py
+Python/__pycache__
+Python/.idea
+*__pycache__
+pi_setup.md
