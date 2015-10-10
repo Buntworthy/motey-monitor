@@ -59,6 +59,12 @@ class DHTReader(object):
         reading = self.add_reading_time(reading)
 
         return reading
+		
+    def add_reading_time(self, reading):
+        # TODO make this a method of an abc
+        now = datetime.datetime.now()
+        reading['datetime']  = str(now)
+        return reading
 
 
 class DummySerialReader(object):
