@@ -3,6 +3,9 @@ import random
 import time
 import datetime
 
+# External
+import Libraries.Adafruit_DHT as DHT
+
 
 class WebReader(object):
     """
@@ -37,11 +40,22 @@ class WebReader(object):
         return reading
 
 class DHTReader(object):
-    def __init__(self):
-        pass
+    def __init__(self, reading_id):
+        # set up the sensor
+        self.sensor = DHT.DHT22
+        self.pin = 4
+        self.reading_id = reading_id
+
 
     def get_temp(self):
-        pass
+        # TODO deal with misreads
+        rh, temp = DHT.read_retry(self.sensor, self.pin)
+
+        # TODO don't repeat yourself!
+        reading = {'temp': temp, 'id': self.reading_id}
+        reading = self.add_reading_time(reading)
+
+        return reading
 
 
 class DummySerialReader(object):

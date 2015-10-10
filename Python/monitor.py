@@ -60,8 +60,9 @@ if __name__ == "__main__":
     # Set up queue and workers
     q = Queue()
     workers = list()
-    workers.append(Worker(2, WebReader("Web reading"), q))
-    workers.append(Worker(0.1, DummySerialReader(), q))
+    workers.append(Worker(2, WebReader("web"), q))
+    workers.append(Worker(2, DHTReader("dht"), q))
+    #workers.append(Worker(0.1, DummySerialReader(), q))
 
     # Set up thread for output
     p = PhpWriter(q)

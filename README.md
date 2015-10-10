@@ -3,16 +3,17 @@
 
 <!-- MarkdownTOC depth=3 -->
 
-- Overview
-    - Aim
-    - Things to use:
-    - List of sensors:
-- Temperature sensors
-    - Web temperature
-- Hub
-- Database
-    - Structure
-    - PHP updates
+- [Overview](#overview)
+    - [Aim](#aim)
+    - [Things to use:](#things-to-use)
+    - [List of sensors:](#list-of-sensors)
+- [Temperature sensors](#temperature-sensors)
+    - [Web temperature](#web-temperature)
+    - [DHT temperature](#dht-temperature)
+- [Hub](#hub)
+- [Database](#database)
+    - [Structure](#structure)
+    - [PHP updates](#php-updates)
 
 <!-- /MarkdownTOC -->
 
@@ -44,6 +45,10 @@ Moteino using RF for communication to the hub, DHT-22 for temperature and humidi
 ### Web temperature
 
 Using openweathermap.org API for grabbing current conditions in Cambridge.
+
+### DHT temperature
+
+Temperature read by raspberry pi from DHT-22 temperature sensor, using mala-zaba's Python 3 compatible fork of the Adafruit DHT library: https://github.com/mala-zaba/Adafruit_Python_DHT
 
 ## Hub
 
