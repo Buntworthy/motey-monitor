@@ -9,7 +9,16 @@ import Libraries.Adafruit_DHT as DHT
 # Internal
 from constants import *
 
-class WebReader(object):
+class Reader(object):
+
+    def add_reading_time(self, reading):
+        # TODO make this a method of an abc
+        now = datetime.datetime.now()
+        reading['datetime']  = str(now)
+        return reading
+
+
+class WebReader(Reader):
     """
     WebReader grabs temperature information from a web API, assigned an ID on creation
     which remains constant.
@@ -36,13 +45,7 @@ class WebReader(object):
         else:
             raise ConnectionError("Couldn't get the temperature")
 
-    def add_reading_time(self, reading):
-        # TODO make this a method of an abc
-        now = datetime.datetime.now()
-        reading['datetime']  = str(now)
-        return reading
-
-class DHTReader(object):
+class DHTReader(Reader):
     def __init__(self, reading_id):
         # set up the sensor
         self.sensor = DHT.DHT22
@@ -59,15 +62,9 @@ class DHTReader(object):
         reading = self.add_reading_time(reading)
 
         return reading
-		
-    def add_reading_time(self, reading):
-        # TODO make this a method of an abc
-        now = datetime.datetime.now()
-        reading['datetime']  = str(now)
-        return reading
 
 
-class DummySerialReader(object):
+class DummySerialReader(Reader):
     """ Dummy version of the serial reader used to monitor the mote
     Waits a random length of time before outputting a reading to simulate
     waiting for a serial input
@@ -89,9 +86,4 @@ class DummySerialReader(object):
         # Assemble the result
         reading = {'temp': dummy_temp, 'id': reading_id}
         reading = self.add_reading_time(reading)
-        return reading
-
-    def add_reading_time(self, reading):
-        now = datetime.datetime.now()
-        reading['datetime']  = str(now)
         return reading
