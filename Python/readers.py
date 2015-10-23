@@ -2,6 +2,8 @@ import requests
 import random
 import time
 import datetime
+import serial
+import json
 
 # External
 import Libraries.Adafruit_DHT as DHT
@@ -12,7 +14,6 @@ from constants import *
 class Reader(object):
 
     def add_reading_time(self, reading):
-        # TODO make this a method of an abc
         now = datetime.datetime.now()
         reading['datetime']  = str(now)
         return reading
@@ -61,6 +62,31 @@ class DHTReader(Reader):
         reading = {'temp': temp, 'id': self.reading_id}
         reading = self.add_reading_time(reading)
 
+        return reading
+
+class SerialReader(Reader):
+    """ Class to read from the serial port to receive data from
+    the moteino gateway
+    """
+    def __init__(self):
+        self.ser = serial.Serial(
+               port='/dev/ttyUSB0',
+               baudrate = 115200,
+               parity = serial.PARITY_NONE,
+               stopbits = serial.STOPBITS_ONE,
+               bytesize = serial.EIGHTBITS,
+               timeout = None
+           )
+
+    def get_temp(self):
+        # Read from the serial port
+        line = self.ser.readline()
+
+        # Unpack the data from the serial line
+        # Expect a line in json format, e.g.:
+        # {"id": "ABC", "temp": 25.4}
+        reading = json.loads(line)
+        reading = self.add_reading_time(reading)
         return reading
 
 
