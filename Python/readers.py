@@ -11,11 +11,11 @@ import Libraries.Adafruit_DHT as DHT
 # Internal
 from constants import *
 
-class Reader(object):
 
+class Reader(object):
     def add_reading_time(self, reading):
         now = datetime.datetime.now()
-        reading['datetime']  = str(now)
+        reading['datetime'] = str(now)
         return reading
 
 
@@ -24,6 +24,7 @@ class WebReader(Reader):
     WebReader grabs temperature information from a web API, assigned an ID on creation
     which remains constant.
     """
+
     def __init__(self, reading_id):
         # This will always be for Cambridge:
         self.root = 'http://api.openweathermap.org/data/2.5/weather'
@@ -46,13 +47,13 @@ class WebReader(Reader):
         else:
             raise ConnectionError("Couldn't get the temperature")
 
+
 class DHTReader(Reader):
     def __init__(self, reading_id):
         # set up the sensor
         self.sensor = DHT.DHT22
         self.pin = 4
         self.reading_id = reading_id
-
 
     def get_temp(self):
         # TODO deal with misreads
@@ -64,19 +65,21 @@ class DHTReader(Reader):
 
         return reading
 
+
 class SerialReader(Reader):
     """ Class to read from the serial port to receive data from
     the moteino gateway
     """
+
     def __init__(self):
         self.ser = serial.Serial(
-               port='/dev/ttyUSB0',
-               baudrate = 115200,
-               parity = serial.PARITY_NONE,
-               stopbits = serial.STOPBITS_ONE,
-               bytesize = serial.EIGHTBITS,
-               timeout = None
-           )
+            port='/dev/ttyUSB0',
+            baudrate=115200,
+            parity=serial.PARITY_NONE,
+            stopbits=serial.STOPBITS_ONE,
+            bytesize=serial.EIGHTBITS,
+            timeout=None
+        )
 
     def get_temp(self):
         # Read from the serial port
@@ -96,16 +99,17 @@ class DummySerialReader(Reader):
     waiting for a serial input
     Also simulates receiving an ID from the serial input
     """
+
     def __init__(self):
         self.min_wait = 0
-        self.max_wait = 5
+        self.max_wait = 300
         self.max_dummy_temp = 30.0
 
     def get_temp(self):
         # Wait for a bit
         time.sleep(random.randint(self.min_wait, self.max_wait))
         # Make up a reading
-        dummy_temp = self.max_dummy_temp*random.random()
+        dummy_temp = self.max_dummy_temp * random.random()
         # Make up an reading_id
         reading_id = "Serial reading: " + str(random.randint(0, 100))
 
