@@ -5,17 +5,23 @@ import datetime
 import serial
 import json
 
-# External
-import Libraries.Adafruit_DHT as DHT
-
 # Internal
 from constants import *
 
 
 class Reader(object):
+    def __init__(self):
+        self.reading_id = "000"
+
     def add_reading_time(self, reading):
         now = datetime.datetime.now()
         reading['datetime'] = str(now)
+        return reading
+
+    def read(self):
+        temp = self.get_temp()
+        reading = {'temp': temp, 'id': self.reading_id}
+        reading = self.add_reading_time(reading)
         return reading
 
 
@@ -39,31 +45,9 @@ class WebReader(Reader):
             # Interpret the response
             result = r.json()
             temp = result['main']['temp'] - 273.15
-
-            # Assemble the result
-            reading = {'temp': temp, 'id': self.reading_id}
-            reading = self.add_reading_time(reading)
-            return reading
+            return temp
         else:
             raise ConnectionError("Couldn't get the temperature")
-
-
-class DHTReader(Reader):
-    def __init__(self, reading_id):
-        # set up the sensor
-        self.sensor = DHT.DHT22
-        self.pin = 4
-        self.reading_id = reading_id
-
-    def get_temp(self):
-        # TODO deal with misreads
-        rh, temp = DHT.read_retry(self.sensor, self.pin)
-
-        # TODO don't repeat yourself!
-        reading = {'temp': temp, 'id': self.reading_id}
-        reading = self.add_reading_time(reading)
-
-        return reading
 
 
 class SerialReader(Reader):
@@ -89,8 +73,8 @@ class SerialReader(Reader):
         # Expect a line in json format, e.g.:
         # {"id": "ABC", "temp": 25.4}
         reading = json.loads(line)
-        reading = self.add_reading_time(reading)
-        return reading
+        self.reading_id = reading['id']
+        return reading['temp']
 
 
 class DummySerialReader(Reader):
@@ -113,7 +97,5 @@ class DummySerialReader(Reader):
         # Make up an reading_id
         reading_id = "Serial reading: " + str(random.randint(0, 100))
 
-        # Assemble the result
-        reading = {'temp': dummy_temp, 'id': reading_id}
-        reading = self.add_reading_time(reading)
-        return reading
+        self.reading_id = reading_id
+        return dummy_temp

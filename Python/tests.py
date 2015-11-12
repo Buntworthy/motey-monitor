@@ -13,6 +13,7 @@ class TestReaders(unittest.TestCase):
 
     def test_WebReaderReads(self):
         reading = self.w.get_temp()
+        self.assertTrue(isinstance(reading, float))
 
     def test_WebReaderError(self):
         self.w.root = "http://nothinghereatall.imsure"
@@ -26,7 +27,7 @@ class TestReaders(unittest.TestCase):
             'id'        - a string
             'datetime'  - a string
         """
-        reading = self.w.get_temp()
+        reading = self.w.read()
         self.assertTrue(isinstance(reading['temp'], float))
         self.assertTrue(isinstance(reading['id'], str))
         self.assertTrue(isinstance(reading['datetime'], str))
