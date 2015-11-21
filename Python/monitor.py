@@ -5,6 +5,7 @@ from queue import Queue
 
 # Internal
 from readers import *
+from readers_pi import *
 
 
 class Worker(threading.Thread):
@@ -60,9 +61,9 @@ if __name__ == "__main__":
     # Set up queue and workers
     q = Queue()
     workers = list()
-    workers.append(Worker(60, WebReader("web"), q))
-    workers.append(Worker(60, DHTReader("dht"), q))
-    #workers.append(Worker(0.1, DummySerialReader(), q))
+    workers.append(Worker(600, WebReader("web"), q))
+    #workers.append(Worker(60, DHTReader("dht"), q))
+    workers.append(Worker(0.1, SerialReader(), q))
 
     # Set up thread for output
     p = PhpWriter(q)
