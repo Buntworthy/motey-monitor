@@ -5,7 +5,7 @@ from queue import Queue
 
 # Internal
 from readers import *
-from readers_pi import *
+#from readers_pi import *
 
 
 class Worker(threading.Thread):
@@ -22,7 +22,7 @@ class Worker(threading.Thread):
     def run(self):
         while True:
             time.sleep(self.interval)
-            reading = self.reader.get_temp()
+            reading = self.reader.read()
             self.queue.put(reading)
 
 
@@ -51,7 +51,7 @@ class PhpWriter(threading.Thread):
 
             # Add to the db
             # TODO handle connection errors
-            response = requests.get(self.url, params=reading)
+            response = requests.get(self.url, params=str(reading['temp']))
             print(reading)
 
 

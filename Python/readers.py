@@ -57,7 +57,8 @@ class SerialReader(Reader):
 
     def __init__(self):
         self.ser = serial.Serial(
-            port='/dev/ttyUSB0',
+            #port='/dev/ttyUSB0',
+            port='COM3',
             baudrate=115200,
             parity=serial.PARITY_NONE,
             stopbits=serial.STOPBITS_ONE,
@@ -65,16 +66,23 @@ class SerialReader(Reader):
             timeout=None
         )
 
-    def get_temp(self):
+    def read(self):
+        """
+        Override the superclass method as the serial string
+        returns both the id and the temperature
+        :return:
+        """
+
         # Read from the serial port
         line = self.ser.readline()
+        line = line.decode('utf-8')
 
         # Unpack the data from the serial line
         # Expect a line in json format, e.g.:
         # {"id": "ABC", "temp": 25.4}
         reading = json.loads(line)
-        self.reading_id = reading['id']
-        return reading['temp']
+        reading = self.add_reading_time(reading)
+        return reading
 
 
 class DummySerialReader(Reader):
