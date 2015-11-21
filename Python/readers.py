@@ -57,8 +57,7 @@ class SerialReader(Reader):
 
     def __init__(self):
         self.ser = serial.Serial(
-            #port='/dev/ttyUSB0',
-            port='COM3',
+            port='/dev/ttyUSB0',
             baudrate=115200,
             parity=serial.PARITY_NONE,
             stopbits=serial.STOPBITS_ONE,
