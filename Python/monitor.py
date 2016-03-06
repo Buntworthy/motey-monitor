@@ -2,6 +2,7 @@
 import threading
 import time
 from queue import Queue
+from Adafruit_IO import Client
 
 # Internal
 from readers import *
@@ -54,6 +55,25 @@ class PhpWriter(threading.Thread):
             response = requests.get(self.url, params=str(reading['temp']))
             print(reading)
 
+
+class AioWriter(threading.Thread):
+
+    def __init__(self, queue):
+        super().__init__()
+        self.queue = queue
+        self.aio = Client(AIO_KEY)
+        self.daemon = False
+
+    def run(self):
+        while True:
+            # Get the reading from the queue
+            reading = self.queue.get()
+
+            temperature = reading['temp']
+            id = reading['id']
+            self.aio.send(id, temperature)
+
+            print(reading)
 
 
 if __name__ == "__main__":
