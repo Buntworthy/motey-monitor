@@ -2,7 +2,7 @@
 import threading
 import time
 from queue import Queue
-from Adafruit_IO import Client
+from Adafruit_IO import Client, AdafruitIOError
 
 # Internal
 from readers import *
@@ -71,9 +71,10 @@ class AioWriter(threading.Thread):
 
             temperature = reading['temp']
             id = reading['id']
-            self.aio.send(id, temperature)
-
-            print(reading)
+            try:
+                self.aio.send(id, temperature)
+            except AdafruitIOError as e:
+                print(e)
 
 
 if __name__ == "__main__":
