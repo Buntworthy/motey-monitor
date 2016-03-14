@@ -1,0 +1,45 @@
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<script>
+$(document).ready(function() {
+
+    var options = {
+        chart: {
+            renderTo: 'container',
+            type: 'spline',
+	    zoomType: 'x'
+        },
+	xAxis: {
+                type: 'datetime'
+        },
+        series: [{}]
+    };
+
+    $.ajax({
+		beforeSend: function(request) {
+			request.setRequestHeader("X-Aio-Key", '8bcd964118a4e404518a6822cb8517997e6301fe');
+		},
+		dataType: "json",
+		url: "https://io.adafruit.com/api/feeds/525300/data",
+		success: function(data) {
+			console.log(data);
+			var arr1 = $.map(data, function(el) { 
+					return([[Date.parse(el.created_at), parseFloat(el.value)]]) 
+			});
+			options.series[0].data = arr1;
+			console.log(arr1);
+			
+			var chart = new Highcharts.Chart(options);	
+		}
+	});
+	
+	
+});
+
+</script>
