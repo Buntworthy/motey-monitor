@@ -18,7 +18,7 @@
 #define ACK_TIME      30 // max # of ms to wait for an ack
 #define LED           9 // Moteinos have LEDs on D9
 
-#define SEND_LOOPS   1 //send data this many sleep loops (15 loops of 8sec cycles = 120sec ~ 2 minutes)
+#define SEND_LOOPS   75 //send data this many sleep loops (15 loops of 8sec cycles = 120sec ~ 2 minutes)
 //*********************************************************************************************
 #define SLEEP_FASTEST SLEEP_15Ms
 #define SLEEP_FAST SLEEP_250Ms
@@ -107,6 +107,6 @@ void loop() {
        Serial.print(" ok!");
   }
   
-  //radio.sleep(); //you can comment out this line if you want this node to listen for wireless programming requests
+  radio.sleep(); //you can comment out this line if you want this node to listen for wireless programming requests
   LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
 }
